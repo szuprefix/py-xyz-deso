@@ -4,13 +4,16 @@ from __future__ import unicode_literals
 from deso.Post import Post as OPost
 from deso.Post import getRoute, addExtraData, Sign_Transaction
 import requests
+from six import text_type
 
 class Post(OPost):
 
     def send(self, content, imageUrl=[], videoUrl=[], postExtraData={}):
         # if user passed url for a single image as string, convert str into list[str]
-        if type(imageUrl) == type("str"):
+        if isinstance(imageUrl, text_type):
             imageUrl = [imageUrl]
+        if isinstance(videoUrl, text_type):
+            videoUrl = [videoUrl]
         header = {
             "content-type": "application/json"
         }
@@ -47,6 +50,8 @@ class Post(OPost):
             return submitResponse.json()
 
     def uploadVideo(self, video):
+        if isinstance(video, text_type):
+            video = open(video, 'rb')
         ROUTE = getRoute()
         endpointURL = ROUTE + "upload-video"
         from .tus import upload

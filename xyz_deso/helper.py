@@ -4,7 +4,7 @@ from __future__ import unicode_literals
 from django.conf import settings
 from .Post import Post
 
-CONF = settings.get('DESO', {})
+CONF = getattr(settings, 'DESO', {})
 
 
 def new_post():
